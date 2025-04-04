@@ -12,7 +12,7 @@ class RequestModel(BaseModel):
     prompt: str  # Define el campo 'prompt' como un string
 
 @app.post("/consultar")
-async def consultar(request: RequestModel):
+async def consultar(request: Request, body: RequestModel):
     """
     Endpoint para consultar el modelo de IA.
 
@@ -26,7 +26,7 @@ async def consultar(request: RequestModel):
         # Obtener IP real del usuario
         ip_usuario = obtener_ip_real(request)
         # Obtener datos del cuerpo de la solicitud
-        prompt = request.prompt
+        prompt = body.prompt
         if not prompt:
             raise HTTPException(status_code=400, detail="El prompt es obligatorio.")
         # Consultar IA y devolver respuesta
