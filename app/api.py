@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 import os
-from main_service import *
+from .main_service import *
 
 # Crear instancia de FastAPI
 app = FastAPI()
