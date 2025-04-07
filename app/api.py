@@ -3,9 +3,20 @@ from pydantic import BaseModel
 import uvicorn
 import os
 from .main_service import *
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # Crear instancia de FastAPI
 app = FastAPI()
+
+# Permitir CORS para todas las fuentes (útil para pruebas)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción puedes restringir esto
+    allow_credentials=True,
+    allow_methods=["*"],  # O especificar ["POST"]
+    allow_headers=["*"],
+)
 
 # Definir el modelo de datos para la solicitud
 class RequestModel(BaseModel):
