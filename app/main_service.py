@@ -75,24 +75,29 @@ def consultar_ia(usuario, prompt)-> str:
         str: devuelve la respuesta del modelo a la consulta del usuario.
     """
     # Comprobamos si el usuario ya ha interactuado con el chat
-    if usuario not in diccionario_memorias:
-        diccionario_memorias[usuario] = memoria.copy()
-        print(f"{datetime.now()} - Nueva memoria para el usuario: {usuario}")
-    # Actualizamos tiempo de actividad
-    tiempo_actividad[usuario] = datetime.now()
-    # Añadimos el prompt a la memoria
-    diccionario_memorias[usuario].append({"role": "user", "content": prompt})
-    # Realizamos la solicitud al modelo Quasar-alpha con el prompt proporcionado
-    completion = client.chat.completions.create(
-        extra_headers={},
-        model="openrouter/quasar-alpha",  # Asegúrate de que este sea el modelo correcto
-        messages=diccionario_memorias[usuario],
-    )
-    # Extraemos la respuesta de la IA
-    respuesta = completion.choices[0].message.content
-    # Guardamos la respuesta en la memoria
-    diccionario_memorias[usuario].append({"role": "assistant", "content": respuesta})
-    return respuesta
+    try:
+        if usuario not in diccionario_memorias:
+            diccionario_memorias[usuario] = memoria.copy()
+            print(f"{datetime.now()} - Nueva memoria para el usuario: {usuario}")
+        # Actualizamos tiempo de actividad
+        tiempo_actividad[usuario] = datetime.now()
+        # Añadimos el prompt a la memoria
+        diccionario_memorias[usuario].append({"role": "user", "content": prompt})
+        # Realizamos la solicitud al modelo Quasar-alpha con el prompt proporcionado
+        completion = client.chat.completions.create(
+            extra_headers={},
+            model="openrouter/quasar-alpha",  # Asegúrate de que este sea el modelo correcto
+            messages=diccionario_memorias[usuario],
+        )
+        # Extraemos la respuesta de la IA
+        respuesta = completion.choices[0].message.content
+        # Guardamos la respuesta en la memoria
+        diccionario_memorias[usuario].append({"role": "assistant", "content": respuesta})
+        return respuesta
+    except Exception as e:
+        print(f"Error al consultar IA: {e}")
+        print(f"TOKEN: {API_TOKEN}")
+        return "Lo siento, ha habido un error al procesar tu solicitud."
 
 
 def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):

@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 import os
-from .main_service import *
+from main_service import *
 
 # Crear instancia de FastAPI
 app = FastAPI()
@@ -33,6 +33,7 @@ async def consultar(request: Request, body: RequestModel):
         respuesta = consultar_ia(ip_usuario, prompt)
         return {"respuesta": respuesta}
     except Exception as e:
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
 if __name__ == "__main__":
