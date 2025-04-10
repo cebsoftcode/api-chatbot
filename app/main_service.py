@@ -93,6 +93,8 @@ def consultar_ia(usuario, prompt)-> str:
         respuesta = completion.choices[0].message.content
         # Guardamos la respuesta en la memoria
         diccionario_memorias[usuario].append({"role": "assistant", "content": respuesta})
+        # Ejecutamos el método
+        limpiar_memorias_inactivas(TIEMPO_EXPIRACION, TIEMPO_REPETICION)
         return respuesta
     except Exception as e:
         print(f"Error al consultar IA: {e}")
@@ -108,6 +110,7 @@ def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
         tiempo_expiracion int: cantidad de minutos en los que el usuario tiene que interactuar el chat para evitar que se borre su memoria.
         tiempo_repeticion int: cantidad de segundos que tarda esta función en volver a ejecutarse.
     """
+    print("Comprobando memorias inactivas...")
     # Creamos una lista de usuarios a eliminar
     usuarios_a_eliminar = []
     # Para cada usuario que tengamos en tiempo_actividad, haremos:
@@ -122,15 +125,12 @@ def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
         del tiempo_actividad[usuario]
         print(f"{datetime.now()} - Memoria eliminada para el usuario: {usuario}")
     # Hacemos que despues de X segundos, se vuelva a ejecutar el método
-    threading.Timer(
-        tiempo_repeticion,
-        limpiar_memorias_inactivas,
-        args=[tiempo_expiracion, tiempo_repeticion],
-    ).start()
-
-
-# Ejecutamos el método
-limpiar_memorias_inactivas(TIEMPO_EXPIRACION, TIEMPO_REPETICION)
+    if len(diccionario_memorias) > 0:
+        threading.Timer(
+            tiempo_repeticion,
+            limpiar_memorias_inactivas,
+            args=[tiempo_expiracion, tiempo_repeticion],
+        ).start()
 
 # # Ejemplo de uso
 # prompt = "¿Hay leopardos en la albufera?"
