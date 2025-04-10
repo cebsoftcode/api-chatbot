@@ -78,7 +78,7 @@ def consultar_ia(usuario, prompt)-> str:
     try:
         if usuario not in diccionario_memorias:
             diccionario_memorias[usuario] = memoria.copy()
-            print(f"{datetime.now()} - Nueva memoria para el usuario: {usuario}")
+            print(f"🟢 Nueva memoria para el usuario: {usuario}")
         # Actualizamos tiempo de actividad
         tiempo_actividad[usuario] = datetime.now()
         # Añadimos el prompt a la memoria
@@ -99,7 +99,7 @@ def consultar_ia(usuario, prompt)-> str:
     except Exception as e:
         print(f"Error al consultar IA: {e}")
         print(f"TOKEN: {API_TOKEN}")
-        return "Lo siento, ha habido un error al procesar tu solicitud."
+        return "Lo siento, ha habido un error al procesar tu solicitud. Pongase en contacto con el desarrollador."
 
 
 def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
@@ -110,7 +110,7 @@ def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
         tiempo_expiracion int: cantidad de minutos en los que el usuario tiene que interactuar el chat para evitar que se borre su memoria.
         tiempo_repeticion int: cantidad de segundos que tarda esta función en volver a ejecutarse.
     """
-    print("Comprobando memorias inactivas...")
+    print("🔵 Comprobando memorias inactivas...")
     # Creamos una lista de usuarios a eliminar
     usuarios_a_eliminar = []
     # Para cada usuario que tengamos en tiempo_actividad, haremos:
@@ -123,7 +123,7 @@ def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
         # Eliminamos la memória del usuario y su ultima actividad
         del diccionario_memorias[usuario]
         del tiempo_actividad[usuario]
-        print(f"{datetime.now()} - Memoria eliminada para el usuario: {usuario}")
+        print(f"🟠 Memoria eliminada para el usuario: {usuario}")
     # Hacemos que despues de X segundos, se vuelva a ejecutar el método
     if len(diccionario_memorias) > 0:
         threading.Timer(
@@ -131,6 +131,8 @@ def limpiar_memorias_inactivas(tiempo_expiracion, tiempo_repeticion):
             limpiar_memorias_inactivas,
             args=[tiempo_expiracion, tiempo_repeticion],
         ).start()
+    else: 
+        print("🔴 Ya no hay memorias que eliminar.")
 
 # # Ejemplo de uso
 # prompt = "¿Hay leopardos en la albufera?"
