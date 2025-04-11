@@ -92,7 +92,7 @@ def consultar_ia(usuario, prompt)-> str:
         )
         # Extraemos la respuesta de la IA
         respuesta = completion.choices[0].message.content
-        print(f"🟣: {prompt}")
+        print(f"🟣: {respuesta}")
         # Guardamos la respuesta en la memoria
         diccionario_memorias[usuario].append({"role": "assistant", "content": respuesta})
         # Ejecutamos el método
