@@ -80,6 +80,7 @@ def consultar_ia(usuario, prompt)-> str:
             diccionario_memorias[usuario] = memoria.copy()
             print(f"🟢 Nueva memoria para el usuario: {usuario}")
         # Actualizamos tiempo de actividad
+        print(f"🟡: {prompt}")
         tiempo_actividad[usuario] = datetime.now()
         # Añadimos el prompt a la memoria
         diccionario_memorias[usuario].append({"role": "user", "content": prompt})
@@ -91,6 +92,7 @@ def consultar_ia(usuario, prompt)-> str:
         )
         # Extraemos la respuesta de la IA
         respuesta = completion.choices[0].message.content
+        print(f"🟣: {prompt}")
         # Guardamos la respuesta en la memoria
         diccionario_memorias[usuario].append({"role": "assistant", "content": respuesta})
         # Ejecutamos el método
