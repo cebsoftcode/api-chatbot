@@ -87,7 +87,7 @@ def consultar_ia(usuario, prompt)-> str:
         # Realizamos la solicitud al modelo Quasar-alpha con el prompt proporcionado
         completion = client.chat.completions.create(
             extra_headers={},
-            model="openrouter/quasar-alpha",  # Asegúrate de que este sea el modelo correcto
+            model="openrouter/optimus-alpha",  # Asegúrate de que este sea el modelo correcto
             messages=diccionario_memorias[usuario],
         )
         # Extraemos la respuesta de la IA
@@ -100,7 +100,6 @@ def consultar_ia(usuario, prompt)-> str:
         return respuesta
     except Exception as e:
         print(f"Error al consultar IA: {e}")
-        print(f"TOKEN: {API_TOKEN}")
         return "Lo siento, ha habido un error al procesar tu solicitud. Pongase en contacto con el desarrollador."
 
 
